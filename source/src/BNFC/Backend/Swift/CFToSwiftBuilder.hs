@@ -71,15 +71,6 @@ mkBuildTokenFunction tokenCat = vcat
       "Double"  -> "Double(ctx.getText()!)!"
       _         -> "ctx.getText()!"
 
--- | generate name for function which will build node for some cat.
-mkBuildFnName :: Cat -> String
-mkBuildFnName cat = "build" ++ firstUpperCase (restName cat)
-  where
-    restName cat = case cat of
-      ListCat cat  -> restName cat ++ "List"
-      TokenCat cat -> cat ++ "Token"
-      otherCat     -> catToStr otherCat
-
 mkBuildFunction :: String -> RuleData -> Doc
 mkBuildFunction lang (cat, rulesWithLabels)  = vcat
     [ text $ "func" +++ mkBuildFnName cat ++ "(_ ctx: " ++ (addParserPrefix lang $ identCat cat) ++ "Context) throws ->" +++ catToSwiftType cat +++ "{"
